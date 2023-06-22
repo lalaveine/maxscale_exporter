@@ -364,7 +364,7 @@ func main() {
 	flag.Parse()
 
 	log.Print("Starting MaxScale exporter")
-	log.Printf("Scraping MaxScale REST API at: %v", *address)
+	// log.Printf("Scraping MaxScale REST API at: %v", *address)
 	exporter, err := NewExporter(*address)
 	if err != nil {
 		log.Fatalf("Failed to start maxscale exporter: %v\n", err)
