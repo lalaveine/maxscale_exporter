@@ -9,6 +9,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"crypto/tls"
 
 	"github.com/buger/jsonparser"
 	"github.com/prometheus/client_golang/prometheus"
@@ -151,7 +152,9 @@ func (m *MaxScale) Collect(ch chan<- prometheus.Metric) {
 
 func (m *MaxScale) getStatistics(path string) []byte {
 
-	url := "http://" + m.Address + "/v1" + path
+	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+
+	url := "https://" + m.Address + "/v1" + path
 
 	req, _ := http.NewRequest("GET", url, nil)
 
