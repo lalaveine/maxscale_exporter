@@ -152,13 +152,17 @@ func (m *MaxScale) Collect(ch chan<- prometheus.Metric) {
 
 func (m *MaxScale) getStatistics(path string) []byte {
 
-	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+	tr := &http.Transport{
+        TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+    }
+
+    client := &http.Client{Transport: tr}
 
 	url := "https://" + m.Address + "/v1" + path
 
-	req, _ := http.NewRequest("GET", url, nil)
+	// req, _ := client.NewRequest("GET", url, nil)
 
-	res, err := http.DefaultClient.Do(req)
+	res, err := client.Get(url)
 
 	if err != nil {
 		fmt.Printf("Error while doing request %v: %v\n", path, err)
